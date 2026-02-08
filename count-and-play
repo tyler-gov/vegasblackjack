@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Blackjack Simulator (3:2, $10 Min)</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #1f1f1f; color: #fff; text-align: center; }
+  #table { margin: 20px auto; width: 520px; background: #0b6623; padding: 20px; border-radius: 10px; }
+  .cards { margin: 8px; }
+  button { margin: 6px; padding: 8px 14px; font-size: 16px; }
+  #counterOverlay {
+    position: fixed; left: 10px; top: 50px;
+    background: rgba(0,0,0,0.8); color: #00ff66;
+    padding: 12px; font-size: 16px; border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div id="counterOverlay">
+  <div>Running Count: <span id="runCount">0</span></div>
+  <div>True Count: <span id="trueCount">0.0</span></div>
+  <div>Bankroll: $<span id="bankroll">1000</span></div>
+</div>
+
+<h2>Blackjack Simulator (3:2 • $10 Min • Dealer Stands on 17)</h2>
+
+<button onclick="dealHand()">Deal ($10)</button>
+<button onclick="playerHit()">Hit</button>
+<button onclick="playerStand()">Stand</button>
+
+<div id="table">
+  <div><strong>Player:</strong> <span id="playerHand"></span></div>
+  <div><strong>Dealer:</strong> <span id="dealerHand"></span></div>
+  <div id="status"></div>
+</div>
+
+<script>
+let shoe = [], cardsDealt = 0;
+let runningCount = 0;
+let bankroll = 1000;
+const BET = 10;
+
+let player = [], dealer = [], inHand = false;
+
+// ----- Shoe -----
+function buildShoe() {
+  const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+  const suits = ['♠','♥','♦','♣'];
+  let deck = [];
+  for (let d = 0; d < 8; d++)
+    for (let r of ranks)
+      for (let s of suits) deck.push(r+s);
+
+  for (let i = deck.length-1; i>0; i--) {
+    let j = Math.floor(Math.random()*(i+1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  return deck;
+}
+
+function checkReshuffle() {
+  if (cardsDealt >= (8*52 - 1.5*52)) {
+    shoe = buildShoe();
+    cardsDealt = 0;
+    runningCount = 0;
+    updateUI();
+  }
+}
+
+// ----- Deal -----
+function drawCard() {
+  cardsDealt++;
+  let card = shoe.pop();
+  updateCount(card);
+  updateUI();
+  checkReshuffle();
+  return card;
+}
+
+// ----- Counting -----
+function updateCount(card) {
+  let r = card.replace(/[^0-9AJQK]/g,'').replace('10','10');
+  if (['2','3','4','5','6'].includes(r)) runningCount++;
+  else if (['10','J','Q','K','A'].includes(r)) runningCount--;
+}
+
+function trueCount() {
+  let decksLeft = Math.max(shoe.length/52, 0.25);
+  return (runningCount / decksLeft).toFixed(1);
+}
+
+// ----- Hand Values -----
+function handValue(hand) {
+  let total = 0, aces = 0;
+  for (let c of hand) {
+    let r = c.replace(/[^0-9AJQK]/g,'').replace('10','10');
+    if (r==='A') { total+=11; aces++; }
+    else if (['J','Q','K','10'].includes(r)) total+=10;
+    else total+=parseInt(r);
+  }
+  while (total>21 && aces>0) { total-=10; aces--; }
+  return total;
+}
+
+function isBlackjack(hand) {
+  return hand.length===2 && handValue(hand)===21;
+}
+
+// ----- Gameplay -----
+function dealHand() {
+  if (bankroll < BET) return;
+  inHand = true;
+  bankroll -= BET;
+
+  player = [drawCard(), drawCard()];
+  dealer = [drawCard(), drawCard()];
+
+  updateTable(true);
+
+  if (isBlackjack(player)) resolveHand();
+}
+
+function playerHit() {
+  if (!inHand) return;
+  player.push(drawCard());
+  updateTable(true);
+  if (handValue(player) > 21) resolveHand();
+}
+
+function playerStand() {
+  if (!inHand) return;
+  dealerPlay();
+  resolveHand();
+}
+
+function dealerPlay() {
+  while (handValue(dealer) < 17) {
+    dealer.push(drawCard());
+  }
+}
+
+// ----- Resolution -----
+function resolveHand() {
+  inHand = false;
+  dealerPlay();
+  updateTable(false);
+
+  let p = handValue(player);
+  let d = handValue(dealer);
+  let msg = "";
+
+  if (isBlackjack(player) && !isBlackjack(dealer)) {
+    bankroll += BET * 2.5; // 3:2 payout
+    msg = "Blackjack! Paid 3:2";
+  }
+  else if (p > 21) msg = "Player busts";
+  else if (d > 21) { bankroll += BET*2; msg = "Dealer busts"; }
+  else if (p > d) { bankroll += BET*2; msg = "Player wins"; }
+  else if (p === d) { bankroll += BET; msg = "Push"; }
+  else msg = "Dealer wins";
+
+  document.getElementById('status').textContent = msg;
+  updateUI();
+}
+
+// ----- UI -----
+function updateTable(hideDealer) {
+  document.getElementById('playerHand').textContent = player.join(' ');
+  document.getElementById('dealerHand').textContent =
+    hideDealer ? dealer[0]+" ??" : dealer.join(' ');
+}
+
+function updateUI() {
+  document.getElementById('runCount').textContent = runningCount;
+  document.getElementById('trueCount').textContent = trueCount();
+  document.getElementById('bankroll').textContent = bankroll;
+}
+
+shoe = buildShoe();
+</script>
+</body>
+</html>
