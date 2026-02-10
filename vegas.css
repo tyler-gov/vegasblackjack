@@ -1,0 +1,307 @@
+/* Felt table background */
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #147a52, #04251a);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: white;
+}
+
+#table {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 14px;
+  position: relative;
+}
+
+/* Fixed areas to prevent layout jumping */
+.fixed {
+  min-height: 200px;
+  margin-bottom: 18px;
+}
+
+.fixed-center {
+  padding-bottom: 10px;
+}
+
+/* Hands */
+.hand {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 10px 0 12px;
+  min-height: 140px;
+}
+
+/* Card visuals */
+.card {
+  width: 90px;
+  height: 130px;
+  border-radius: 12px;
+  box-shadow: 0 10px 18px rgba(0,0,0,.45);
+  background: #ffffff;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  animation: deal 0.35s ease-out;
+}
+
+.card.red { color: #c1121f; }
+.card.black { color: #111; }
+
+.card.back {
+  background: repeating-linear-gradient(
+    45deg,
+    #1d3557,
+    #1d3557 10px,
+    #457b9d 10px,
+    #457b9d 20px
+  );
+}
+
+@keyframes deal {
+  from { transform: translateY(-18px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Chips between dealer and player */
+.bet-stack,
+.chip-tray {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  min-height: 72px;
+  margin: 12px 0 18px;
+}
+
+.bet-stack .chip {
+  box-shadow: 0 10px 16px rgba(0,0,0,.35), inset 0 0 0 6px rgba(255,255,255,.18);
+}
+
+/* Chip styling */
+.chip {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 16px rgba(0,0,0,.25), inset 0 0 0 6px rgba(255,255,255,.22);
+  transition: transform .12s ease;
+}
+
+.chip:hover { transform: translateY(-3px); }
+
+.chip-5   { background: #ffffff; color: #0b3c5d; border: 3px solid #0b3c5d; }
+.chip-10  { background: #1e90ff; color: #fff; }
+.chip-25  { background: #2ecc71; color: #fff; }
+.chip-50  { background: #e74c3c; color: #fff; }
+.chip-100 { background: #111; color: #fff; }
+
+/* Buttons */
+.actions {
+  margin: 10px 0 18px;
+}
+
+.actions button {
+  margin: 6px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Grey rounded corner panels */
+.panel {
+  background: rgba(230,230,230,0.95);
+  color: #111;
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.18);
+}
+
+.top-panel { margin-bottom: 18px; }
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* Left deck controls */
+.deck-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deck-label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Center bankroll block + rebet */
+.bankroll-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 220px;
+}
+
+.rebet-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rebet-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Strategy inline (right side) */
+.strategy-inline {
+  width: 260px;
+}
+
+.strategy-inline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+#strategy-hint {
+  font-size: 14px;
+}
+
+/* Toggle pill */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input { display: none; }
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background: #555;
+  border-radius: 999px;
+  top: 0; left: 0; right: 0; bottom: 0;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: .2s;
+}
+
+input:checked + .slider { background: #4caf50; }
+input:checked + .slider:before { transform: translateX(20px); }
+
+/* Mistake tracker row */
+.chip-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.mistake-panel {
+  width: 240px;
+  min-height: 92px;
+}
+
+.mistake-title {
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.mistake-count {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.mistake-last {
+  font-size: 13px;
+  line-height: 1.2;
+  opacity: 0.95;
+}
+
+.chip-row-spacer {
+  width: 240px; /* balances row so chips stay centered */
+}
+
+/* Outcome overlay on right */
+.outcome {
+  position: fixed;
+  right: 24px;
+  top: 40%;
+  background: rgba(0,0,0,0.88);
+  color: white;
+  padding: 28px;
+  border-radius: 18px;
+  width: 280px;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0,0,0,.6);
+  z-index: 50;
+  transition: opacity .3s ease;
+}
+
+.outcome.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#outcome-text {
+  font-size: 28px;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+#outcome-amount {
+  font-size: 22px;
+  color: gold;
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+  #table { padding: 10px; }
+  .card { width: 70px; height: 100px; border-radius: 10px; }
+  .hand { gap: 10px; }
+  .top-bar { flex-direction: column; align-items: stretch; }
+  .strategy-inline { width: 100%; }
+  .bankroll-block { min-width: unset; }
+
+  .chip-row { flex-direction: column; }
+  .mistake-panel { width: auto; }
+  .chip-row-spacer { display: none; }
+}
+
+
