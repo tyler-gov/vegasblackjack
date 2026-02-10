@@ -1,0 +1,107 @@
+<div id="table">
+
+  <!-- Top controls panel (grey rounded box) -->
+  <div class="panel top-panel">
+    <div class="top-bar">
+      <!-- Left: Deck Controls -->
+      <div class="deck-controls deck-controls-left">
+        <label class="deck-label">
+          Decks
+          <select id="deck-count"></select>
+        </label>
+
+        <label class="deck-label">
+          Shuffle after
+          <select id="shuffle-point"></select>
+        </label>
+      </div>
+
+      <!-- Center: Bankroll + Re-bet -->
+      <div class="bankroll-block">
+        <div id="bankroll">Bankroll: $1,000.00</div>
+
+        <div class="rebet-inline">
+          <span class="rebet-label">Re-bet</span>
+          <label class="switch">
+            <input type="checkbox" id="rebet-toggle" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Right: Strategy -->
+      <div class="strategy-inline">
+        <div class="strategy-inline-header">
+          <div>Basic Strategy</div>
+          <label class="switch">
+            <input type="checkbox" id="strategy-toggle" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div id="strategy-hint">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dealer -->
+  <div class="dealer fixed">
+    <h2>Dealer <span id="dealer-total"></span></h2>
+    <div id="dealer-hand" class="hand"></div>
+  </div>
+
+  <!-- Bet stack BETWEEN Dealer and Player -->
+  <div id="bet-stack" class="bet-stack"></div>
+
+  <!-- Player -->
+  <div class="player fixed">
+    <h2>Player <span id="player-total"></span></h2>
+    <div id="player-hand" class="hand"></div>
+  </div>
+
+  <!-- Chips + actions -->
+  <div class="center fixed-center">
+
+    <!-- Row: mistake tracker (left) + chips (center) -->
+    <div class="chip-row">
+      <div class="panel mistake-panel" id="mistake-panel">
+        <div class="mistake-title">Mistake Tracker</div>
+        <div class="mistake-count">Mistakes: <span id="mistakes">0</span></div>
+        <div class="mistake-last" id="mistake-last">—</div>
+      </div>
+
+      <div id="chip-tray" class="chip-tray"></div>
+
+      <div class="chip-row-spacer"></div>
+    </div>
+
+    <div class="actions">
+      <button id="deal">Deal</button>
+      <button id="hit" disabled>Hit</button>
+      <button id="stand" disabled>Stand</button>
+      <button id="double" disabled>Double</button>
+      <button id="split" disabled>Split</button>
+    </div>
+
+    <!-- Info panel (grey rounded box) -->
+    <div class="panel info-panel">
+      <div class="info-line">
+        Count: <span id="count">0</span> |
+        True Count: <span id="true-count">0.0</span> |
+        Hands: <span id="hands">0</span> |
+        Wins: <span id="wins">0</span> |
+        Losses: <span id="losses">0</span> |
+        Pushes: <span id="pushes">0</span> |
+        Net: <span id="net">$0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Outcome overlay (right side, large) -->
+  <div id="outcome-panel" class="outcome hidden">
+    <div id="outcome-text"></div>
+    <div id="outcome-amount"></div>
+  </div>
+
+</div>
+
+
